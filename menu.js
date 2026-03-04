@@ -24,7 +24,7 @@ for (let i = 1; i <= 9; i++) {
 // Global Masa Değiştirme Fonksiyonu
 window.changeTable = function() {
     if(confirm("Masayı değiştirmek sepetinizi sıfırlayacaktır. Emin misiniz?")) {
-        cartState = {}; // Sepeti sıfırla
+        cartState = {}; 
         activeOrder = false;
         updateCartUI();
         renderProducts();
@@ -147,7 +147,7 @@ function showToast(message) {
 }
 
 // --- GELİŞMİŞ SEPET MANTIĞI (+ / - İLE) ---
-let cartState = {}; // { itemId: quantity }
+let cartState = {}; 
 let activeOrder = false;
 
 window.updateQty = function(itemId, delta) {
@@ -207,7 +207,6 @@ function updateCartUI() {
     }
 }
 
-// Sepet Çekmecesi Kontrolleri
 const cartOverlay = document.getElementById('cart-sheet-overlay');
 const cartSheet = document.getElementById('cart-sheet');
 
@@ -232,9 +231,7 @@ document.getElementById('confirm-order-btn').onclick = () => {
 };
 
 // --- AKSİYON BAR İŞLEMLERİ (Garson, Puan, Sipariş) ---
-window.callWaiter = function() {
-    showToast("Garson masanıza yönlendirildi.");
-}
+window.callWaiter = function() { showToast("Garson masanıza yönlendirildi."); }
 
 const statusModal = document.getElementById('status-modal');
 const ratingModal = document.getElementById('rating-modal');
@@ -284,7 +281,6 @@ function openModal(item) {
     const modelFileName = item.model.split('/').pop().replace('.glb', '');
 
     if (isIOS) {
-        // iOS İÇİN ÖLÇEKLEME İZNİ (allowsContentScaling=1 YAPILDI)
         arLink.href = `models/${modelFileName}.usdz#allowsContentScaling=1`;
         arLink.setAttribute('rel', 'ar');
     } else {
@@ -306,7 +302,6 @@ function setupModal3D() {
     modalRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     viewerContainer.appendChild(modalRenderer.domElement);
 
-    // Kamerayı biraz daha geriye çektik ki modeller sığsın
     modalCamera = new THREE.PerspectiveCamera(40, viewerContainer.clientWidth / viewerContainer.clientHeight, 0.1, 1000);
     modalCamera.position.set(0, 1.5, 9); 
     

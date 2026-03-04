@@ -28,9 +28,7 @@ html, body {
     display: none !important;
 }
 
-/* =========================================
-   TOAST BİLDİRİMLERİ (Sistem Mesajları)
-   ========================================= */
+/* --- TOAST BİLDİRİMLERİ --- */
 .toast-container {
     position: fixed;
     top: 15px;
@@ -74,9 +72,7 @@ html, body {
     100% { opacity: 0; transform: translateY(-20px); }
 }
 
-/* =========================================
-   İNTRO EKRANI (Masa Seçimi)
-   ========================================= */
+/* --- İNTRO EKRANI --- */
 .intro-screen {
     position: fixed;
     top: 0;
@@ -133,9 +129,7 @@ html, body {
     transform: scale(0.95);
 }
 
-/* =========================================
-   ANA UYGULAMA GÖVDESİ & HEADER
-   ========================================= */
+/* --- ANA UYGULAMA & HEADER --- */
 .main-app {
     padding-bottom: 85px;
     width: 100%;
@@ -203,7 +197,7 @@ html, body {
     background: var(--surface-color);
 }
 
-/* Aksiyon Çubuğu (Garson, Puan, Sipariş) */
+/* Aksiyon Çubuğu */
 .action-bar {
     display: flex;
     gap: 8px;
@@ -232,9 +226,7 @@ html, body {
     background: var(--bg-color);
 }
 
-/* =========================================
-   KATEGORİLER
-   ========================================= */
+/* --- KATEGORİLER --- */
 .category-nav {
     background: var(--surface-color);
     padding: 12px 0 12px 15px;
@@ -274,9 +266,7 @@ html, body {
     color: #fff;
 }
 
-/* =========================================
-   ÜRÜN LİSTESİ & KARTLAR
-   ========================================= */
+/* --- ÜRÜN LİSTESİ --- */
 .product-list {
     padding: 10px 15px 15px;
     display: flex;
@@ -329,7 +319,7 @@ html, body {
     flex-direction: column;
     justify-content: center;
     overflow: hidden;
-    min-width: 0; /* İçeriğin taşmasını önlemek için kritik */
+    min-width: 0; 
 }
 
 .product-tags {
@@ -360,7 +350,6 @@ html, body {
     text-overflow: ellipsis;
 }
 
-/* HATA VEREN KISIM BURASIYDI - NATIVE TEK SATIR KESMEYE ÇEVRİLDİ */
 .product-desc {
     margin: 0 0 6px;
     font-size: 0.7rem;
@@ -384,9 +373,7 @@ html, body {
     font-size: 0.95rem;
 }
 
-/* =========================================
-   MİKTAR KONTROL BUTONLARI (+ / -)
-   ========================================= */
+/* --- MİKTAR KONTROL BUTONLARI --- */
 .qty-controller {
     display: flex;
     align-items: center;
@@ -438,9 +425,7 @@ html, body {
     justify-content: center;
 }
 
-/* =========================================
-   YÜZEN SEPET BARI
-   ========================================= */
+/* --- YÜZEN SEPET BARI --- */
 .floating-cart {
     position: fixed;
     bottom: 15px;
@@ -491,9 +476,7 @@ html, body {
     cursor: pointer;
 }
 
-/* =========================================
-   SEPET DETAY ÇEKMECESİ (BOTTOM SHEET)
-   ========================================= */
+/* --- SEPET ÇEKMECESİ --- */
 .cart-overlay {
     position: fixed;
     top: 0;
@@ -624,9 +607,7 @@ html, body {
     cursor: pointer;
 }
 
-/* =========================================
-   MODALLAR (3D AR, Puan, Sipariş Durumu)
-   ========================================= */
+/* --- MODALLAR --- */
 .modal {
     position: fixed;
     top: 0;
