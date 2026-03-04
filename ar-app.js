@@ -8,6 +8,7 @@ let hitTestSourceRequested = false;
 
 const instructionText = document.getElementById('instruction-text');
 const loaderUI = document.getElementById('loader');
+const uiContainer = document.getElementById('ui-container');
 
 const urlParams = new URLSearchParams(window.location.search);
 const modelName = urlParams.get('model') || 'hamburger'; 
@@ -33,38 +34,45 @@ function init() {
     renderer.xr.enabled = true; 
     document.body.appendChild(renderer.domElement);
 
-    // AR BUTONU VE DOM OVERLAY (Arayüzün AR üzerinde görünmesini sağlar)
+    // DÜZELTME: DOM-Overlay tüm body yerine sadece ui-container div'ine bağlandı!
     const arButton = ARButton.createButton(renderer, { 
         requiredFeatures: ['hit-test'],
         optionalFeatures: ['dom-overlay'],
-        domOverlay: { root: document.body }
+        domOverlay: { root: uiContainer } 
     });
     document.body.appendChild(arButton);
 
-    // Butona tıklandığında kullanıcıya bilgi ver
     arButton.addEventListener('click', () => {
-        instructionText.innerText = "Kamera başlatılıyor, lütfen izin verin veya bekleyin...";
-        arButton.style.opacity = "0.5";
+        instructionText.innerText = "Kamera başlatılıyor. Çıkan uyarıda izin verin...";
     });
 
-    // Modeli Yükle
+    // Modeli Yükle ve Hataları Yakala
     const loader = new GLTFLoader();
-    loader.load(modelPath, (gltf) => {
-        foodModel = gltf.scene;
-        
-        const box = new THREE.Box3().setFromObject(foodModel);
-        const center = box.getCenter(new THREE.Vector3());
-        foodModel.position.sub(center); 
-        
-        const size = box.getSize(new THREE.Vector3());
-        const maxDim = Math.max(size.x, size.y, size.z);
-        foodModel.scale.setScalar(0.25 / maxDim); 
+    loader.load(
+        modelPath, 
+        (gltf) => {
+            foodModel = gltf.scene;
+            
+            const box = new THREE.Box3().setFromObject(foodModel);
+            const center = box.getCenter(new THREE.Vector3());
+            foodModel.position.sub(center); 
+            
+            const size = box.getSize(new THREE.Vector3());
+            const maxDim = Math.max(size.x, size.y, size.z);
+            foodModel.scale.setScalar(0.25 / maxDim); 
 
-        loaderUI.style.display = 'none';
-        instructionText.innerText = "Kamerayı açmak için START AR butonuna dokunun.";
-    });
+            loaderUI.style.display = 'none';
+            instructionText.innerText = "Kamerayı açmak için aşağıdaki START AR butonuna dokunun.";
+        },
+        undefined,
+        (error) => {
+            // DÜZELTME: Model bulunamazsa kilitlenmeyi engelle ve hatayı göster
+            loaderUI.style.display = 'none';
+            instructionText.innerHTML = `⚠️ Hata!<br>Model bulunamadı:<br><small>${modelPath}</small>`;
+            console.error("Model Yükleme Hatası:", error);
+        }
+    );
 
-    // Hedef Halkası (Reticle)
     const ringGeo = new THREE.RingGeometry(0.04, 0.05, 32).rotateX(-Math.PI / 2);
     const ringMat = new THREE.MeshBasicMaterial({color: 0xFF5A00}); 
     reticle = new THREE.Mesh(ringGeo, ringMat);
@@ -72,23 +80,19 @@ function init() {
     reticle.visible = false;
     scene.add(reticle);
 
-    // Ekrana Dokunma İşlemi
     const controller = renderer.xr.getController(0);
     controller.addEventListener('select', onSelect);
     scene.add(controller);
 
     window.addEventListener('resize', onWindowResize);
     
-    // AR Motorunu Başlat
     renderer.setAnimationLoop(render);
 }
 
 function onSelect() {
     if (reticle.visible && foodModel) {
         scene.children.forEach(child => {
-            if(child.isGroup && child !== foodModel) {
-                scene.remove(child);
-            }
+            if(child.isGroup && child !== foodModel) scene.remove(child);
         });
 
         const clone = foodModel.clone();
@@ -120,9 +124,7 @@ function render(timestamp, frame) {
             session.addEventListener('end', () => {
                 hitTestSourceRequested = false;
                 hitTestSource = null;
-                // AR Kapatıldığında metni sıfırla
                 instructionText.innerText = "Kamerayı açmak için START AR butonuna dokunun.";
-                document.getElementById('ARButton').style.opacity = "1";
             });
             hitTestSourceRequested = true;
         }
@@ -134,10 +136,10 @@ function render(timestamp, frame) {
                 const hit = hitTestResults[0];
                 reticle.visible = true;
                 reticle.matrix.fromArray(hit.getPose(referenceSpace).transform.matrix);
-                instructionText.innerText = "Yüzey bulundu. Yerleştirmek için ekrana dokunun.";
+                instructionText.innerText = "Yüzey bulundu. Yemeği yerleştirmek için ekrana dokunun.";
             } else {
                 reticle.visible = false;
-                instructionText.innerText = "Yüzey aranıyor... Lütfen telefonu hafifçe sağa sola hareket ettirin.";
+                instructionText.innerText = "Yüzey aranıyor... Kamerayı masada yavaşça hareket ettirin.";
             }
         }
     }

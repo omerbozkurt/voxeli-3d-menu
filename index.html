@@ -16,10 +16,9 @@
 
     <div id="intro-screen" class="intro-screen">
         <div class="intro-content">
-            <h1>Sisteme Bağlan</h1>
-            <p>Sipariş ağını başlatmak için masanızı seçin.</p>
-            <div class="table-grid" id="table-grid">
-                </div>
+            <h1>Hoş Geldiniz</h1>
+            <p>Lezzet yolculuğunuza başlamak için lütfen masanızı seçin.</p>
+            <div class="table-grid" id="table-grid"></div>
         </div>
     </div>
 
@@ -29,66 +28,52 @@
                 <h1>VOXELI Restoran</h1>
                 <span id="active-table-badge" class="table-badge" onclick="changeTable()" title="Masayı Değiştir">Masa -- <small>✎</small></span>
             </div>
-            
             <div class="search-bar">
-                <input type="text" id="search-input" placeholder="Menüde arayın (Örn: Burger)...">
+                <input type="text" id="search-input" placeholder="Hangi lezzeti arıyorsunuz? (Örn: Burger)...">
             </div>
-
             <div class="action-bar">
-                <button class="action-btn" onclick="callWaiter()">🛎️ Garson Çağır</button>
+                <button class="action-btn" onclick="callWaiter()">🛎️ Ekibi Çağır</button>
                 <button class="action-btn" onclick="openOrderStatus()">🕒 Siparişim</button>
-                <button class="action-btn" onclick="openRatingModal()">⭐ Puan Ver</button>
+                <button class="action-btn" onclick="openRatingModal()">⭐ Değerlendir</button>
             </div>
         </header>
 
-        <nav class="category-nav">
-            <ul id="category-list"></ul>
-        </nav>
-
+        <nav class="category-nav"><ul id="category-list"></ul></nav>
         <main class="product-list" id="product-list"></main>
 
         <div class="floating-cart" id="floating-cart">
             <div class="cart-info">
-                <span id="cart-count">0 Ürün</span>
+                <span id="cart-count">0 Seçim</span>
                 <span id="cart-total">0.00 ₺</span>
             </div>
-            <button class="view-cart-btn" id="view-cart-btn">Sepeti Gör</button>
+            <button class="view-cart-btn" id="view-cart-btn">Sepete Git</button>
         </div>
     </div>
 
     <div id="cart-sheet-overlay" class="cart-overlay hidden"></div>
     <div id="cart-sheet" class="cart-sheet hidden">
         <div class="sheet-header">
-            <h2>Sepetim</h2>
+            <h2>Sipariş Özeti</h2>
             <button id="close-sheet-btn" class="close-sheet">&times;</button>
         </div>
-        <div class="sheet-body" id="cart-items-list">
-            </div>
+        <div class="sheet-body" id="cart-items-list"></div>
         <div class="sheet-footer">
-            <div class="sheet-total-row">
-                <span>Genel Toplam</span>
-                <strong id="sheet-total-price">0.00 ₺</strong>
-            </div>
-            <button class="checkout-confirm-btn" id="confirm-order-btn">Siparişi Onayla</button>
+            <div class="sheet-total-row"><span>Toplam Tutar</span><strong id="sheet-total-price">0.00 ₺</strong></div>
+            <button class="checkout-confirm-btn" id="confirm-order-btn">Siparişi Mutfağa İlet</button>
         </div>
     </div>
 
     <div id="model-modal" class="modal hidden">
         <div class="modal-glass">
             <div id="close-btn" class="close-btn">&times;</div>
-            <div id="3d-viewer" class="viewer-container">
-                <div id="loader-wrapper"><div class="spinner"></div></div>
-            </div>
+            <div id="3d-viewer" class="viewer-container"><div id="loader-wrapper"><div class="spinner"></div></div></div>
             <div class="modal-info">
-                <div class="info-header">
-                    <h2 id="modal-title">Ürün Adı</h2>
-                    <span id="modal-price" class="modal-price-tag">0 ₺</span>
-                </div>
+                <div class="info-header"><h2 id="modal-title"></h2><span id="modal-price" class="modal-price-tag"></span></div>
                 <div id="modal-tags" class="modal-tags"></div>
                 <p id="modal-desc" class="modal-desc"></p>
                 <div class="nutrition-row">
                     <div class="glass-box"><strong>Enerji</strong><span id="modal-calories"></span> kcal</div>
-                    <div class="glass-box"><strong>Süre</strong><span id="modal-time"></span> dk</div>
+                    <div class="glass-box"><strong>Hazırlanma</strong><span id="modal-time"></span> dk</div>
                 </div>
                 <div class="action-buttons">
                     <a id="ar-link" href="#" class="ar-btn">🧊 Masada Gör</a>
@@ -99,21 +84,21 @@
     </div>
 
     <div id="status-modal" class="modal hidden">
-        <div class="modal-glass" style="padding: 25px; align-items: center; text-align: center;">
-            <h2 style="margin-bottom: 10px;">Sipariş Durumu</h2>
-            <p id="order-status-text" style="color: #6B7280; margin-bottom: 20px; line-height: 1.5;"></p>
-            <button class="order-btn" onclick="closeStatusModal()" style="width: 100%;">Kapat</button>
+        <div class="modal-glass p-25 text-center">
+            <h2 class="m-b-10">Sipariş Durumu</h2>
+            <p id="order-status-text" class="m-b-20"></p>
+            <button class="order-btn w-100" onclick="closeStatusModal()">Menüye Dön</button>
         </div>
     </div>
-
+    
     <div id="rating-modal" class="modal hidden">
-        <div class="modal-glass" style="padding: 25px; align-items: center; text-align: center;">
-            <h2 style="margin-bottom: 10px;">Bizi Değerlendirin</h2>
-            <p style="color: #6B7280; margin-bottom: 20px;">Hizmetimizden memnun kaldınız mı?</p>
-            <div style="font-size: 2.2rem; margin-bottom: 25px; cursor: pointer; letter-spacing: 10px;">
+        <div class="modal-glass p-25 text-center">
+            <h2 class="m-b-10">Deneyiminizi Puanlayın</h2>
+            <p style="color: #6B7280; margin-bottom: 20px;">Lezzetlerimizden ve hizmetimizden memnun kaldınız mı?</p>
+            <div class="stars m-b-20" style="font-size: 2.2rem; cursor: pointer; letter-spacing: 10px;">
                 <span onclick="submitRating(1)">⭐</span><span onclick="submitRating(2)">⭐</span><span onclick="submitRating(3)">⭐</span><span onclick="submitRating(4)">⭐</span><span onclick="submitRating(5)">⭐</span>
             </div>
-            <button class="ar-btn" onclick="closeRatingModal()" style="width: 100%;">İptal</button>
+            <button class="ar-btn w-100" onclick="closeRatingModal()">Belki Daha Sonra</button>
         </div>
     </div>
 

@@ -27,7 +27,7 @@ for (let i = 1; i <= 9; i++) {
 }
 
 window.changeTable = function() {
-    if(confirm("Masayı değiştirmek sepetinizi sıfırlayacaktır. Emin misiniz?")) {
+    if(confirm("Masayı değiştirmek mevcut sepetinizi sıfırlayacaktır. Onaylıyor musunuz?")) {
         cartState = {}; 
         activeOrder = false;
         updateCartUI();
@@ -37,15 +37,15 @@ window.changeTable = function() {
     }
 }
 
-// --- VERİTABANI ---
+// --- VERİTABANI (UX Copywriting İyileştirmeleri Yapıldı) ---
 const menuData = {
-    categories: ["Tümü", "Burgerler", "Pizzalar", "Tatlılar", "Uzak Doğu", "Meksika"],
+    categories: ["Tüm Lezzetler", "Burgerler", "Pizzalar", "Tatlılar", "Uzak Doğu", "Meksika"],
     items: [
-        { id: 1, cat: "Burgerler", name: "Truffle Burger", price: 280, desc: "Dana eti, Cheddar peyniri, trüf mayonez.", cal: 850, time: 15, img: "images/hamburger.jpg", model: "models/hamburger.glb", tags: [{name:"⭐ Popüler", class:"star"}] },
-        { id: 2, cat: "Pizzalar", name: "Margherita", price: 310, desc: "Mozzarella, Fesleğen, İtalyan domates sosu.", cal: 720, time: 20, img: "images/pizza.jpg", model: "models/pizza.glb", tags: [{name:"🌱 Vegan", class:"vegan"}] },
-        { id: 3, cat: "Tatlılar", name: "San Sebastian", price: 160, desc: "Akışkan iç doku, frambuaz sosu ile.", cal: 540, time: 5, img: "images/cheesecake.jpg", model: "models/cheesecake.glb", tags: [] },
-        { id: 4, cat: "Uzak Doğu", name: "Sushi Roll", price: 380, desc: "Taze somon, avokado, özel pirinç.", cal: 420, time: 25, img: "images/sushi.jpg", model: "models/sushi.glb", tags: [{name:"⭐ Popüler", class:"star"}] },
-        { id: 5, cat: "Meksika", name: "Taco", price: 240, desc: "Kıyma, Guacamole sos, çıtır mısır tortillası.", cal: 480, time: 10, img: "images/taco.jpg", model: "models/taco.glb", tags: [{name:"🔥 Acı", class:"hot"}] }
+        { id: 1, cat: "Burgerler", name: "Truffle Burger", price: 280, desc: "150g sulu dana eti, eritilmiş Cheddar, karamelize soğan ve ev yapımı trüf mayonezli imza lezzetimiz.", cal: 850, time: 15, img: "images/hamburger.jpg", model: "models/hamburger.glb", tags: [{name:"⭐ Popüler", class:"star"}] },
+        { id: 2, cat: "Pizzalar", name: "Margherita", price: 310, desc: "İncecik hamur üzerinde taze İtalyan domates sosu, manda mozzarellası ve taze fesleğen yaprakları.", cal: 720, time: 20, img: "images/pizza.jpg", model: "models/pizza.glb", tags: [{name:"🌱 Vejetaryen", class:"vegan"}] },
+        { id: 3, cat: "Tatlılar", name: "San Sebastian", price: 160, desc: "Dışı mükemmel kızarmış, içi kremsi ve akışkan klasik İspanyol lezzeti. Taze frambuaz sosu eşliğinde.", cal: 540, time: 5, img: "images/cheesecake.jpg", model: "models/cheesecake.glb", tags: [] },
+        { id: 4, cat: "Uzak Doğu", name: "Sushi Roll", price: 380, desc: "Taze Norveç somonu, olgun avokado ve krem peynirin özel suşi pirinciyle enfes buluşması.", cal: 420, time: 25, img: "images/sushi.jpg", model: "models/sushi.glb", tags: [{name:"⭐ Popüler", class:"star"}] },
+        { id: 5, cat: "Meksika", name: "Taco", price: 240, desc: "Gevrek mısır tortillası içinde baharatlı dana kıyma, taze guacamole, pico de gallo ve süzme yoğurt.", cal: 480, time: 10, img: "images/taco.jpg", model: "models/taco.glb", tags: [{name:"🔥 Acı", class:"hot"}] }
     ]
 };
 
@@ -53,7 +53,7 @@ const menuData = {
 const categoryList = document.getElementById('category-list');
 const productList = document.getElementById('product-list');
 const searchInput = document.getElementById('search-input');
-let currentCategory = "Tümü";
+let currentCategory = "Tüm Lezzetler";
 let currentSearch = "";
 
 function renderCategories() {
@@ -79,7 +79,7 @@ function renderProducts() {
     productList.innerHTML = '';
     
     let filteredItems = menuData.items;
-    if (currentCategory !== "Tümü") filteredItems = filteredItems.filter(item => item.cat === currentCategory);
+    if (currentCategory !== "Tüm Lezzetler") filteredItems = filteredItems.filter(item => item.cat === currentCategory);
     if (currentSearch.trim() !== "") {
         const query = currentSearch.toLowerCase();
         filteredItems = filteredItems.filter(item => 
@@ -90,7 +90,14 @@ function renderProducts() {
     }
 
     if (filteredItems.length === 0) {
-        productList.innerHTML = '<p style="text-align:center; color:#6B7280; margin-top:20px;">Sonuç bulunamadı.</p>';
+        // İyileştirilmiş Boş Durum (Empty State) Mesajı
+        productList.innerHTML = `
+            <div style="text-align:center; padding: 40px 20px;">
+                <p style="font-size: 2rem; margin-bottom: 10px;">🍽️</p>
+                <h3 style="color: #111827; margin: 0 0 10px;">Hmm... Bulamadık.</h3>
+                <p style="color: #6B7280; font-size: 0.9rem; line-height: 1.5; margin: 0;">Aradığınız lezzet şu an menümüzde yok gibi görünüyor.<br>Farklı bir kategori denemeye ne dersiniz?</p>
+            </div>
+        `;
         return;
     }
 
@@ -142,12 +149,12 @@ const toastContainer = document.getElementById('toast-container');
 window.showToast = function(message) {
     const toast = document.createElement('div');
     toast.className = 'toast';
-    toast.innerHTML = `<span>${message}</span> <span>✓</span>`;
+    toast.innerHTML = `<span>${message}</span>`;
     toastContainer.appendChild(toast);
     setTimeout(() => {
         toast.classList.add('fade-out');
         toast.addEventListener('animationend', () => toast.remove());
-    }, 2000);
+    }, 2500);
 }
 
 // --- SEPET MANTIĞI ---
@@ -158,9 +165,9 @@ window.updateQty = function(itemId, delta) {
     
     if(cartState[itemId] <= 0) {
         delete cartState[itemId];
-        if(delta < 0) showToast("Sepetten çıkarıldı.");
+        if(delta < 0) showToast("Ürün sepetten çıkarıldı.");
     } else if (delta > 0) {
-        showToast("Sepete eklendi.");
+        showToast("Nefis bir seçim! Sepete eklendi 😋");
     }
     
     if(navigator.vibrate) navigator.vibrate(50);
@@ -202,7 +209,7 @@ function updateCartUI() {
         closeCartSheet();
     } else {
         floatingCart.classList.add('visible');
-        document.getElementById('cart-count').innerText = `${totalItems} Ürün`;
+        document.getElementById('cart-count').innerText = `${totalItems} Seçim`;
         document.getElementById('cart-total').innerText = `${totalPrice.toFixed(2)} ₺`;
         document.getElementById('sheet-total-price').innerText = `${totalPrice.toFixed(2)} ₺`;
     }
@@ -224,7 +231,7 @@ cartOverlay.onclick = closeCartSheet;
 
 document.getElementById('confirm-order-btn').onclick = () => {
     activeOrder = true;
-    showToast("Siparişiniz Mutfağa İletildi!");
+    showToast("Harika! Siparişiniz şeflerimize iletildi 👨‍🍳");
     cartState = {}; 
     updateCartUI();
     renderProducts();
@@ -232,7 +239,7 @@ document.getElementById('confirm-order-btn').onclick = () => {
 };
 
 // --- AKSİYON BAR İŞLEMLERİ ---
-window.callWaiter = function() { showToast("Garson masanıza yönlendirildi."); }
+window.callWaiter = function() { showToast("Ekibimiz hemen masanıza yönlendiriliyor 👍"); }
 
 const statusModal = document.getElementById('status-modal');
 const ratingModal = document.getElementById('rating-modal');
@@ -240,9 +247,9 @@ const ratingModal = document.getElementById('rating-modal');
 window.openOrderStatus = function() {
     const statusText = document.getElementById('order-status-text');
     if(activeOrder) {
-        statusText.innerHTML = "<strong style='color:#FF5A00; font-size:1.2rem;'>Hazırlanıyor 👨‍🍳</strong><br><br>Tahmini teslimat: 12 dakika";
+        statusText.innerHTML = "<strong style='color:#FF5A00; font-size:1.3rem;'>Şu an Hazırlanıyor 👨‍🍳</strong><br><br>Siparişiniz ustalıkla hazırlanıyor. Tahmini servis süresi: 12 dakika.";
     } else {
-        statusText.innerText = "Henüz aktif bir siparişiniz bulunmuyor.";
+        statusText.innerHTML = "Şu an masanıza ait aktif bir sipariş bulunmuyor.<br>Menümüzü keşfetmeye ne dersiniz?";
     }
     statusModal.classList.remove('hidden');
 }
@@ -251,7 +258,8 @@ window.closeStatusModal = () => statusModal.classList.add('hidden');
 window.openRatingModal = function() { ratingModal.classList.remove('hidden'); }
 window.closeRatingModal = () => ratingModal.classList.add('hidden');
 window.submitRating = function(stars) {
-    showToast(`${stars} Yıldız verdiniz. Teşekkürler!`);
+    let msg = stars >= 4 ? "Harika puanınız için çok teşekkür ederiz! ❤️" : "Değerlendirmeniz için teşekkürler, kendimizi geliştireceğiz.";
+    showToast(msg);
     closeRatingModal();
 }
 
