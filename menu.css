@@ -28,7 +28,7 @@ html, body {
     display: none !important;
 }
 
-/* --- TOAST BİLDİRİMLERİ --- */
+/* ================== TOAST BİLDİRİMLERİ ================== */
 .toast-container {
     position: fixed;
     top: 15px;
@@ -46,15 +46,15 @@ html, body {
 .toast {
     background: var(--text-main);
     color: #fff;
-    padding: 10px 16px;
-    border-radius: 10px;
-    font-size: 0.85rem;
+    padding: 12px 18px;
+    border-radius: 12px;
+    font-size: 0.9rem;
     font-weight: 600;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-    animation: toastIn 0.3s forwards;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    animation: toastIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
     opacity: 0;
 }
 
@@ -64,7 +64,7 @@ html, body {
 }
 
 .toast.fade-out {
-    animation: toastOut 0.3s forwards;
+    animation: toastOut 0.3s ease forwards;
 }
 
 @keyframes toastOut {
@@ -72,54 +72,51 @@ html, body {
     100% { opacity: 0; transform: translateY(-20px); }
 }
 
-/* --- İNTRO EKRANI --- */
+/* ================== İNTRO EKRANI ================== */
 .intro-screen {
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    top: 0; left: 0; right: 0; bottom: 0;
     background: var(--surface-color);
     z-index: 9999;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 15px;
+    padding: 20px;
     text-align: center;
 }
 
 .intro-content h1 {
-    font-size: 1.8rem;
-    margin-bottom: 8px;
+    font-size: 2rem;
+    margin-bottom: 10px;
     font-weight: 800;
 }
 
 .intro-content p {
     color: var(--text-muted);
-    margin-bottom: 25px;
-    font-size: 0.9rem;
+    margin-bottom: 30px;
+    font-size: 0.95rem;
 }
 
 .table-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
+    gap: 15px;
     width: 100%;
-    max-width: 300px;
+    max-width: 350px;
     margin: 0 auto;
 }
 
 .table-select-btn {
     background: var(--bg-color);
     border: 2px solid transparent;
-    border-radius: 14px;
-    padding: 18px 0;
-    font-size: 1.1rem;
+    border-radius: 16px;
+    padding: 20px 0;
+    font-size: 1.2rem;
     font-weight: 700;
     color: var(--text-main);
     cursor: pointer;
-    transition: 0.2s;
+    transition: all 0.2s;
     font-family: inherit;
 }
 
@@ -129,15 +126,15 @@ html, body {
     transform: scale(0.95);
 }
 
-/* --- ANA UYGULAMA & HEADER --- */
+/* ================== ANA UYGULAMA VE HEADER ================== */
 .main-app {
-    padding-bottom: 85px;
+    padding-bottom: 95px;
     width: 100%;
 }
 
 .app-header {
     background: var(--surface-color);
-    padding: 15px 15px 10px;
+    padding: 20px 20px 15px;
     position: sticky;
     top: 0;
     z-index: 100;
@@ -148,11 +145,11 @@ html, body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 12px;
+    margin-bottom: 15px;
 }
 
 .brand-info h1 {
-    font-size: 1.1rem;
+    font-size: 1.3rem;
     font-weight: 800;
     margin: 0;
     letter-spacing: -0.5px;
@@ -161,35 +158,30 @@ html, body {
 .table-badge {
     background: var(--bg-color);
     color: var(--text-main);
-    padding: 5px 12px;
+    padding: 6px 14px;
     border-radius: 50px;
     font-weight: 700;
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     cursor: pointer;
     border: 1px solid var(--border);
+    transition: background 0.2s;
 }
 
-.table-badge:active {
-    background: var(--border);
-}
-
-.table-badge small {
-    opacity: 0.5;
-    margin-left: 4px;
-}
+.table-badge:active { background: var(--border); }
+.table-badge small { opacity: 0.5; margin-left: 5px; }
 
 /* Arama Çubuğu */
 .search-bar input {
     width: 100%;
-    padding: 10px 14px;
-    border-radius: 10px;
+    padding: 12px 15px;
+    border-radius: 12px;
     border: 1px solid var(--border);
     background: var(--bg-color);
     font-family: inherit;
-    font-size: 16px;
+    font-size: 16px; /* iOS Zoom Engeli İçin Kesin 16px */
     color: var(--text-main);
     outline: none;
-    margin-bottom: 12px;
+    margin-bottom: 15px;
 }
 
 .search-bar input:focus {
@@ -200,38 +192,35 @@ html, body {
 /* Aksiyon Çubuğu */
 .action-bar {
     display: flex;
-    gap: 8px;
+    gap: 10px;
     overflow-x: auto;
     padding-bottom: 5px;
     scrollbar-width: none;
 }
 
-.action-bar::-webkit-scrollbar {
-    display: none;
-}
+.action-bar::-webkit-scrollbar { display: none; }
 
 .action-btn {
     background: var(--surface-color);
     border: 1px solid var(--border);
     color: var(--text-main);
-    padding: 6px 12px;
-    border-radius: 8px;
-    font-size: 0.75rem;
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 0.85rem;
     font-weight: 600;
     white-space: nowrap;
     cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
 }
 
-.action-btn:active {
-    background: var(--bg-color);
-}
+.action-btn:active { background: var(--bg-color); }
 
-/* --- KATEGORİLER --- */
+/* ================== KATEGORİLER ================== */
 .category-nav {
     background: var(--surface-color);
-    padding: 12px 0 12px 15px;
+    padding: 15px 0 15px 20px;
     position: sticky;
-    top: 125px;
+    top: 150px;
     z-index: 99;
 }
 
@@ -240,25 +229,24 @@ html, body {
     margin: 0;
     padding: 0;
     display: flex;
-    gap: 8px;
+    gap: 10px;
     overflow-x: auto;
     scrollbar-width: none;
 }
 
-#category-list::-webkit-scrollbar {
-    display: none;
-}
+#category-list::-webkit-scrollbar { display: none; }
 
 .cat-btn {
     background: var(--bg-color);
     color: var(--text-muted);
     border: 1px solid transparent;
-    padding: 6px 14px;
+    padding: 10px 18px;
     border-radius: 50px;
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     font-weight: 600;
     white-space: nowrap;
     cursor: pointer;
+    transition: 0.2s;
 }
 
 .cat-btn.active {
@@ -266,28 +254,29 @@ html, body {
     color: #fff;
 }
 
-/* --- ÜRÜN LİSTESİ --- */
+/* ================== ÜRÜN LİSTESİ ================== */
 .product-list {
-    padding: 10px 15px 15px;
+    padding: 15px 20px 20px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 15px;
 }
 
 .product-card {
     background: var(--surface-color);
-    border-radius: 14px;
-    padding: 10px;
+    border-radius: 16px;
+    padding: 15px;
     display: flex;
-    gap: 12px;
+    gap: 15px;
     cursor: pointer;
     border: 1px solid transparent;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
 }
 
 .product-img-wrap {
-    width: 85px;
-    height: 85px;
-    border-radius: 10px;
+    width: 100px;
+    height: 100px;
+    border-radius: 12px;
     position: relative;
     flex-shrink: 0;
     background: #eee;
@@ -302,14 +291,14 @@ html, body {
 
 .badge-3d {
     position: absolute;
-    bottom: 4px;
-    left: 4px;
+    bottom: 5px;
+    left: 5px;
     background: rgba(0, 0, 0, 0.8);
     color: #fff;
-    font-size: 0.5rem;
+    font-size: 0.55rem;
     font-weight: 700;
-    padding: 3px 6px;
-    border-radius: 4px;
+    padding: 4px 8px;
+    border-radius: 6px;
     backdrop-filter: blur(4px);
 }
 
@@ -319,19 +308,19 @@ html, body {
     flex-direction: column;
     justify-content: center;
     overflow: hidden;
-    min-width: 0; 
+    min-width: 0;
 }
 
 .product-tags {
     display: flex;
-    gap: 4px;
-    margin-bottom: 4px;
+    gap: 5px;
+    margin-bottom: 6px;
 }
 
 .tag {
-    font-size: 0.55rem;
+    font-size: 0.6rem;
     font-weight: 700;
-    padding: 2px 5px;
+    padding: 3px 6px;
     border-radius: 4px;
     background: var(--bg-color);
     color: var(--text-muted);
@@ -342,22 +331,24 @@ html, body {
 .tag.star { color: #F4A261; background: rgba(244, 162, 97, 0.1); }
 
 .product-details h3 {
-    margin: 0 0 3px;
-    font-size: 0.95rem;
+    margin: 0 0 5px;
+    font-size: 1.05rem;
     font-weight: 700;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
+/* Standart ve hatasız tek satır kesme yöntemi */
 .product-desc {
-    margin: 0 0 6px;
-    font-size: 0.7rem;
+    margin: 0 0 10px;
+    font-size: 0.8rem;
     color: var(--text-muted);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     display: block;
+    width: 100%;
 }
 
 .product-bottom {
@@ -370,10 +361,10 @@ html, body {
 .product-price {
     font-weight: 700;
     color: var(--text-main);
-    font-size: 0.95rem;
+    font-size: 1.1rem;
 }
 
-/* --- MİKTAR KONTROL BUTONLARI --- */
+/* ================== MİKTAR BUTONLARI (+ / -) ================== */
 .qty-controller {
     display: flex;
     align-items: center;
@@ -386,9 +377,9 @@ html, body {
 .qty-btn {
     background: transparent;
     border: none;
-    width: 28px;
-    height: 28px;
-    font-size: 1.1rem;
+    width: 32px;
+    height: 32px;
+    font-size: 1.2rem;
     font-weight: 600;
     color: var(--text-main);
     cursor: pointer;
@@ -398,24 +389,22 @@ html, body {
     padding: 0;
 }
 
-.qty-btn:active {
-    background: var(--border);
-}
+.qty-btn:active { background: var(--border); }
 
 .qty-val {
-    font-size: 0.85rem;
+    font-size: 0.95rem;
     font-weight: 700;
-    width: 18px;
+    width: 22px;
     text-align: center;
 }
 
 .add-btn {
     background: var(--text-main);
     border: none;
-    width: 28px;
-    height: 28px;
+    width: 34px;
+    height: 34px;
     border-radius: 50%;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     font-weight: 600;
     color: #fff;
     cursor: pointer;
@@ -425,7 +414,7 @@ html, body {
     justify-content: center;
 }
 
-/* --- YÜZEN SEPET BARI --- */
+/* ================== YÜZEN SEPET ================== */
 .floating-cart {
     position: fixed;
     bottom: 15px;
@@ -433,14 +422,14 @@ html, body {
     right: 15px;
     background: var(--text-main);
     color: #fff;
-    border-radius: 14px;
-    padding: 12px 18px;
+    border-radius: 16px;
+    padding: 15px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     z-index: 1000;
-    transition: transform 0.4s;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     transform: translateY(150%);
 }
 
@@ -454,14 +443,14 @@ html, body {
 }
 
 #cart-count {
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     color: #9CA3AF;
     margin-bottom: 2px;
 }
 
 #cart-total {
     font-weight: 700;
-    font-size: 1rem;
+    font-size: 1.15rem;
     color: #fff;
 }
 
@@ -469,23 +458,20 @@ html, body {
     background: #fff;
     color: var(--text-main);
     border: none;
-    padding: 8px 16px;
-    border-radius: 8px;
+    padding: 10px 18px;
+    border-radius: 10px;
     font-weight: 700;
-    font-size: 0.85rem;
+    font-size: 0.95rem;
     cursor: pointer;
 }
 
-/* --- SEPET ÇEKMECESİ --- */
+/* ================== SEPET ÇEKMECESİ ================== */
 .cart-overlay {
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
     z-index: 2000;
-    backdrop-filter: blur(2px);
+    backdrop-filter: blur(3px);
     opacity: 1;
     transition: opacity 0.3s;
 }
@@ -497,17 +483,15 @@ html, body {
 
 .cart-sheet {
     position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    bottom: 0; left: 0; right: 0;
     background: var(--surface-color);
-    border-radius: 20px 20px 0 0;
+    border-radius: 24px 24px 0 0;
     z-index: 2001;
     display: flex;
     flex-direction: column;
-    max-height: 80vh;
+    max-height: 85vh;
     transform: translateY(0);
-    transition: transform 0.3s;
+    transition: transform 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 .cart-sheet.hidden {
@@ -515,7 +499,7 @@ html, body {
 }
 
 .sheet-header {
-    padding: 15px;
+    padding: 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -524,17 +508,17 @@ html, body {
 
 .sheet-header h2 {
     margin: 0;
-    font-size: 1.1rem;
+    font-size: 1.25rem;
     font-weight: 800;
 }
 
 .close-sheet {
     background: var(--bg-color);
     border: none;
-    width: 28px;
-    height: 28px;
+    width: 34px;
+    height: 34px;
     border-radius: 50%;
-    font-size: 1.3rem;
+    font-size: 1.5rem;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -542,37 +526,37 @@ html, body {
 }
 
 .sheet-body {
-    padding: 15px;
+    padding: 20px;
     overflow-y: auto;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 15px;
 }
 
 .cart-item-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-bottom: 12px;
+    padding-bottom: 15px;
     border-bottom: 1px solid var(--bg-color);
 }
 
 .cart-item-info h4 {
-    margin: 0 0 4px;
-    font-size: 0.9rem;
+    margin: 0 0 5px;
+    font-size: 1rem;
     font-weight: 700;
 }
 
 .cart-item-price {
     font-weight: 700;
-    font-size: 0.95rem;
+    font-size: 1.05rem;
     color: var(--primary);
-    margin-bottom: 4px;
+    margin-bottom: 5px;
 }
 
 .sheet-footer {
-    padding: 15px;
+    padding: 20px;
     background: var(--surface-color);
     border-top: 1px solid var(--border);
     box-shadow: 0 -10px 20px rgba(0, 0, 0, 0.02);
@@ -582,16 +566,16 @@ html, body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 12px;
+    margin-bottom: 15px;
 }
 
 .sheet-total-row span {
-    font-size: 0.9rem;
+    font-size: 1rem;
     font-weight: 600;
 }
 
 .sheet-total-row strong {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     font-weight: 800;
 }
 
@@ -600,66 +584,64 @@ html, body {
     background: var(--text-main);
     color: #fff;
     border: none;
-    padding: 14px;
-    border-radius: 10px;
-    font-size: 1rem;
+    padding: 16px;
+    border-radius: 12px;
+    font-size: 1.1rem;
     font-weight: 700;
     cursor: pointer;
 }
 
-/* --- MODALLAR --- */
+/* ================== MODALLAR ================== */
 .modal {
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.8);
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.85);
     display: flex;
     align-items: flex-end;
     justify-content: center;
     z-index: 3000;
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(8px);
 }
 
 .modal-glass {
     background: var(--surface-color);
     width: 100%;
     max-width: 500px;
-    border-radius: 20px 20px 0 0;
+    border-radius: 24px 24px 0 0;
     overflow: hidden;
     position: relative;
-    max-height: 85vh;
+    max-height: 90vh;
     display: flex;
     flex-direction: column;
-    animation: slideUp 0.3s;
+    animation: slideUp 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 .viewer-container {
     width: 100%;
-    height: 30vh;
-    background: var(--bg-color);
+    height: 35vh;
+    background: radial-gradient(circle, #E5E7EB 0%, #D1D5DB 100%);
     position: relative;
 }
 
 .close-btn {
     position: absolute;
-    top: 12px;
-    right: 12px;
-    font-size: 1.5rem;
+    top: 15px;
+    right: 15px;
+    font-size: 1.8rem;
     z-index: 3001;
     cursor: pointer;
     background: rgba(255, 255, 255, 0.9);
-    width: 30px;
-    height: 30px;
+    width: 36px;
+    height: 36px;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
 .modal-info {
-    padding: 15px;
+    padding: 20px;
     overflow-y: auto;
 }
 
@@ -667,71 +649,75 @@ html, body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
 }
 
 .info-header h2 {
-    font-size: 1.1rem;
+    font-size: 1.3rem;
     margin: 0;
     font-weight: 800;
 }
 
 .modal-price-tag {
-    font-size: 1.1rem;
+    font-size: 1.25rem;
     font-weight: 700;
     color: var(--text-main);
 }
 
 .modal-tags {
     display: flex;
-    gap: 4px;
-    margin-bottom: 10px;
+    gap: 5px;
+    margin-bottom: 12px;
 }
 
 .modal-desc {
-    font-size: 0.85rem;
+    font-size: 0.95rem;
     color: var(--text-muted);
-    margin-bottom: 15px;
-    line-height: 1.4;
+    margin-bottom: 20px;
+    line-height: 1.5;
 }
 
 .nutrition-row {
     display: flex;
-    gap: 8px;
-    margin-bottom: 15px;
+    gap: 10px;
+    margin-bottom: 20px;
 }
 
 .glass-box {
     background: var(--bg-color);
-    padding: 10px;
-    border-radius: 10px;
+    padding: 12px;
+    border-radius: 12px;
     flex: 1;
     text-align: center;
+    border: 1px solid var(--border);
 }
 
 .glass-box strong {
     display: block;
     color: var(--text-muted);
-    font-size: 0.6rem;
+    font-size: 0.7rem;
     text-transform: uppercase;
-    margin-bottom: 3px;
+    margin-bottom: 4px;
     font-weight: 800;
 }
 
 .action-buttons {
     display: flex;
-    gap: 8px;
+    gap: 10px;
 }
 
 .ar-btn, .order-btn {
     flex: 1;
-    padding: 12px;
-    border-radius: 10px;
+    padding: 16px;
+    border-radius: 12px;
     font-weight: 700;
-    font-size: 0.9rem;
+    font-size: 1rem;
     text-align: center;
     border: none;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .ar-btn {
@@ -748,22 +734,20 @@ html, body {
 
 #loader-wrapper {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    top: 0; left: 0; right: 0; bottom: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--bg-color);
+    background: rgba(255,255,255,0.8);
     z-index: 10;
 }
 
 .spinner {
-    width: 30px;
-    height: 30px;
-    border: 3px solid rgba(17, 24, 39, 0.1);
-    border-top: 3px solid var(--text-main);
+    width: 36px;
+    height: 36px;
+    border: 4px solid rgba(17, 24, 39, 0.1);
+    border-top: 4px solid var(--text-main);
     border-radius: 50%;
     animation: spin 1s linear infinite;
 }
+@keyframes spin { to { transform: rotate(360deg); } }

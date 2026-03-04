@@ -2,7 +2,12 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
-// --- İNTRO & MASA YÖNETİMİ ---
+// --- HAFIZA VE DURUM YÖNETİMİ ---
+const modelCache = new Map(); 
+let cartState = {}; 
+let activeOrder = false;
+
+// --- İNTRO VE MASA YÖNETİMİ ---
 const introScreen = document.getElementById('intro-screen');
 const mainApp = document.getElementById('main-app');
 const tableGrid = document.getElementById('table-grid');
@@ -21,7 +26,6 @@ for (let i = 1; i <= 9; i++) {
     tableGrid.appendChild(btn);
 }
 
-// Global Masa Değiştirme Fonksiyonu
 window.changeTable = function() {
     if(confirm("Masayı değiştirmek sepetinizi sıfırlayacaktır. Emin misiniz?")) {
         cartState = {}; 
@@ -133,9 +137,9 @@ searchInput.addEventListener('input', (e) => {
     renderProducts();
 });
 
-// --- BİLDİRİM (TOAST) SİSTEMİ ---
+// --- BİLDİRİM (TOAST) ---
 const toastContainer = document.getElementById('toast-container');
-function showToast(message) {
+window.showToast = function(message) {
     const toast = document.createElement('div');
     toast.className = 'toast';
     toast.innerHTML = `<span>${message}</span> <span>✓</span>`;
@@ -146,10 +150,7 @@ function showToast(message) {
     }, 2000);
 }
 
-// --- GELİŞMİŞ SEPET MANTIĞI (+ / - İLE) ---
-let cartState = {}; 
-let activeOrder = false;
-
+// --- SEPET MANTIĞI ---
 window.updateQty = function(itemId, delta) {
     if(!cartState[itemId]) cartState[itemId] = 0;
     
@@ -157,7 +158,7 @@ window.updateQty = function(itemId, delta) {
     
     if(cartState[itemId] <= 0) {
         delete cartState[itemId];
-        if(delta < 0) showToast("Ürün sepetten çıkarıldı.");
+        if(delta < 0) showToast("Sepetten çıkarıldı.");
     } else if (delta > 0) {
         showToast("Sepete eklendi.");
     }
@@ -230,7 +231,7 @@ document.getElementById('confirm-order-btn').onclick = () => {
     closeCartSheet();
 };
 
-// --- AKSİYON BAR İŞLEMLERİ (Garson, Puan, Sipariş) ---
+// --- AKSİYON BAR İŞLEMLERİ ---
 window.callWaiter = function() { showToast("Garson masanıza yönlendirildi."); }
 
 const statusModal = document.getElementById('status-modal');
@@ -254,20 +255,19 @@ window.submitRating = function(stars) {
     closeRatingModal();
 }
 
-// --- 3D MODAL MANTIĞI ---
+// --- 3D VE MODAL MANTIĞI ---
 const modal = document.getElementById('model-modal');
 const viewerContainer = document.getElementById('3d-viewer');
 const loaderWrapper = document.getElementById('loader-wrapper');
 
 let modalScene, modalCamera, modalRenderer, modalControls, currentModalModel;
 
-function openModal(item) {
+window.openModal = function(item) {
     document.getElementById('modal-title').innerText = item.name;
     document.getElementById('modal-price').innerText = `${item.price} ₺`;
     document.getElementById('modal-desc').innerText = item.desc;
     document.getElementById('modal-calories').innerText = item.cal;
     document.getElementById('modal-time').innerText = item.time;
-    
     document.getElementById('modal-tags').innerHTML = item.tags.map(t => `<span class="tag ${t.class}">${t.name}</span>`).join('');
     
     const addBtn = document.getElementById('modal-add-btn');
@@ -290,31 +290,28 @@ function openModal(item) {
 
     modal.classList.remove('hidden');
     document.body.style.overflow = 'hidden';
-    setupModal3D();
+    init3DEngine();
     loadModalModel(item.model);
 }
 
-function setupModal3D() {
-    if (modalScene) return;
+function init3DEngine() {
+    if (modalRenderer) return;
+    
     modalScene = new THREE.Scene();
-    modalRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    modalCamera = new THREE.PerspectiveCamera(40, viewerContainer.clientWidth / viewerContainer.clientHeight, 0.1, 1000);
+    modalCamera.position.set(0, 2, 10);
+    
+    modalRenderer = new THREE.WebGLRenderer({ antialias: false, alpha: true, powerPreference: "high-performance", precision: "lowp" });
     modalRenderer.setSize(viewerContainer.clientWidth, viewerContainer.clientHeight);
-    modalRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    modalRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.2));
     viewerContainer.appendChild(modalRenderer.domElement);
 
-    modalCamera = new THREE.PerspectiveCamera(40, viewerContainer.clientWidth / viewerContainer.clientHeight, 0.1, 1000);
-    modalCamera.position.set(0, 1.5, 9); 
-    
-    modalScene.add(new THREE.AmbientLight(0xffffff, 1.2));
-    const dirLight = new THREE.DirectionalLight(0xffffff, 1.5);
-    dirLight.position.set(5, 5, 5);
-    modalScene.add(dirLight);
+    modalScene.add(new THREE.AmbientLight(0xffffff, 1.5));
     
     modalControls = new OrbitControls(modalCamera, modalRenderer.domElement);
     modalControls.enableDamping = true;
     modalControls.autoRotate = true;
-    modalControls.autoRotateSpeed = 2.0;
-    modalControls.enableZoom = false; 
+    modalControls.enableZoom = false;
 
     function animate() {
         requestAnimationFrame(animate);
@@ -325,27 +322,48 @@ function setupModal3D() {
 }
 
 function loadModalModel(path) {
-    const loader = new GLTFLoader();
     loaderWrapper.style.display = 'flex'; 
 
+    if (currentModalModel) modalScene.remove(currentModalModel);
+
+    // Cache'den Yükle
+    if (modelCache.has(path)) {
+        currentModalModel = modelCache.get(path).clone();
+        modalScene.add(currentModalModel);
+        loaderWrapper.style.display = 'none';
+        return;
+    }
+
+    const loader = new GLTFLoader();
     loader.load(path, (gltf) => {
-        loaderWrapper.style.display = 'none'; 
-        if (currentModalModel) modalScene.remove(currentModalModel);
-        currentModalModel = gltf.scene;
+        const model = gltf.scene;
         
-        const box = new THREE.Box3().setFromObject(currentModalModel);
+        // Performans Optimizasyonu
+        model.traverse(n => {
+            if (n.isMesh && n.material) {
+                n.material.precision = "lowp";
+                n.castShadow = false;
+                n.receiveShadow = false;
+            }
+        });
+
+        const box = new THREE.Box3().setFromObject(model);
         const center = box.getCenter(new THREE.Vector3());
-        currentModalModel.position.sub(center);
+        model.position.sub(center);
         
         const size = box.getSize(new THREE.Vector3());
         const maxDim = Math.max(size.x, size.y, size.z);
-        currentModalModel.scale.setScalar(3.5 / maxDim); 
+        model.scale.setScalar(4.0 / maxDim); 
         
+        modelCache.set(path, model); // Hafızaya al
+        currentModalModel = model;
         modalScene.add(currentModalModel);
-    }, undefined, () => { loaderWrapper.style.display = 'none'; });
+        
+        loaderWrapper.style.display = 'none'; 
+    });
 }
 
-function closeModal() {
+window.closeModal = function() {
     modal.classList.add('hidden');
     document.body.style.overflow = 'auto';
     if (currentModalModel) { modalScene.remove(currentModalModel); currentModalModel = null; }
@@ -353,6 +371,7 @@ function closeModal() {
 
 document.getElementById('close-btn').onclick = closeModal;
 
+// Başlangıç
 window.addEventListener('load', () => {
     renderCategories();
     renderProducts();

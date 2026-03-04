@@ -31,7 +31,7 @@
             </div>
             
             <div class="search-bar">
-                <input type="text" id="search-input" placeholder="Menüde arayın...">
+                <input type="text" id="search-input" placeholder="Menüde arayın (Örn: Burger)...">
             </div>
 
             <div class="action-bar">
@@ -101,7 +101,7 @@
     <div id="status-modal" class="modal hidden">
         <div class="modal-glass" style="padding: 25px; align-items: center; text-align: center;">
             <h2 style="margin-bottom: 10px;">Sipariş Durumu</h2>
-            <p id="order-status-text" style="color: var(--text-muted); margin-bottom: 20px;">Henüz aktif bir siparişiniz bulunmuyor.</p>
+            <p id="order-status-text" style="color: #6B7280; margin-bottom: 20px; line-height: 1.5;"></p>
             <button class="order-btn" onclick="closeStatusModal()" style="width: 100%;">Kapat</button>
         </div>
     </div>
@@ -109,8 +109,8 @@
     <div id="rating-modal" class="modal hidden">
         <div class="modal-glass" style="padding: 25px; align-items: center; text-align: center;">
             <h2 style="margin-bottom: 10px;">Bizi Değerlendirin</h2>
-            <p style="color: var(--text-muted); margin-bottom: 20px;">Hizmetimizden memnun kaldınız mı?</p>
-            <div style="font-size: 2rem; margin-bottom: 20px; cursor: pointer; letter-spacing: 10px;">
+            <p style="color: #6B7280; margin-bottom: 20px;">Hizmetimizden memnun kaldınız mı?</p>
+            <div style="font-size: 2.2rem; margin-bottom: 25px; cursor: pointer; letter-spacing: 10px;">
                 <span onclick="submitRating(1)">⭐</span><span onclick="submitRating(2)">⭐</span><span onclick="submitRating(3)">⭐</span><span onclick="submitRating(4)">⭐</span><span onclick="submitRating(5)">⭐</span>
             </div>
             <button class="ar-btn" onclick="closeRatingModal()" style="width: 100%;">İptal</button>
@@ -120,8 +120,8 @@
     <script type="importmap">
     { 
         "imports": { 
-            "three": "https://unpkg.com/three@0.160.0/build/three.module.js", 
-            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js", 
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
         } 
     }
     </script>
