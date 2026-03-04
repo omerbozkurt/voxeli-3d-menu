@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { ARButton } from 'three/addons/webxr/ARButton.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
-let container, camera, scene, renderer, reticle, foodModel;
+let camera, scene, renderer, reticle, foodModel;
 let hitTestSource = null;
 let hitTestSourceRequested = false;
 
@@ -14,12 +14,8 @@ const modelName = urlParams.get('model') || 'hamburger';
 const modelPath = `models/${modelName}.glb`;
 
 init();
-animate();
 
 function init() {
-    container = document.createElement('div');
-    document.body.appendChild(container);
-
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 20);
 
@@ -35,10 +31,23 @@ function init() {
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.xr.enabled = true; 
-    container.appendChild(renderer.domElement);
+    document.body.appendChild(renderer.domElement);
 
-    document.body.appendChild(ARButton.createButton(renderer, { requiredFeatures: ['hit-test'] }));
+    // AR BUTONU VE DOM OVERLAY (Arayüzün AR üzerinde görünmesini sağlar)
+    const arButton = ARButton.createButton(renderer, { 
+        requiredFeatures: ['hit-test'],
+        optionalFeatures: ['dom-overlay'],
+        domOverlay: { root: document.body }
+    });
+    document.body.appendChild(arButton);
 
+    // Butona tıklandığında kullanıcıya bilgi ver
+    arButton.addEventListener('click', () => {
+        instructionText.innerText = "Kamera başlatılıyor, lütfen izin verin veya bekleyin...";
+        arButton.style.opacity = "0.5";
+    });
+
+    // Modeli Yükle
     const loader = new GLTFLoader();
     loader.load(modelPath, (gltf) => {
         foodModel = gltf.scene;
@@ -52,9 +61,10 @@ function init() {
         foodModel.scale.setScalar(0.25 / maxDim); 
 
         loaderUI.style.display = 'none';
-        instructionText.innerText = "Yüzey bulundu. Yerleştirmek için ekrana dokunun.";
+        instructionText.innerText = "Kamerayı açmak için START AR butonuna dokunun.";
     });
 
+    // Hedef Halkası (Reticle)
     const ringGeo = new THREE.RingGeometry(0.04, 0.05, 32).rotateX(-Math.PI / 2);
     const ringMat = new THREE.MeshBasicMaterial({color: 0xFF5A00}); 
     reticle = new THREE.Mesh(ringGeo, ringMat);
@@ -62,11 +72,15 @@ function init() {
     reticle.visible = false;
     scene.add(reticle);
 
+    // Ekrana Dokunma İşlemi
     const controller = renderer.xr.getController(0);
     controller.addEventListener('select', onSelect);
     scene.add(controller);
 
     window.addEventListener('resize', onWindowResize);
+    
+    // AR Motorunu Başlat
+    renderer.setAnimationLoop(render);
 }
 
 function onSelect() {
@@ -92,10 +106,6 @@ function onWindowResize() {
     renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
-function animate() {
-    renderer.setAnimationLoop(render);
-}
-
 function render(timestamp, frame) {
     if (frame) {
         const referenceSpace = renderer.xr.getReferenceSpace();
@@ -110,6 +120,9 @@ function render(timestamp, frame) {
             session.addEventListener('end', () => {
                 hitTestSourceRequested = false;
                 hitTestSource = null;
+                // AR Kapatıldığında metni sıfırla
+                instructionText.innerText = "Kamerayı açmak için START AR butonuna dokunun.";
+                document.getElementById('ARButton').style.opacity = "1";
             });
             hitTestSourceRequested = true;
         }
@@ -121,8 +134,10 @@ function render(timestamp, frame) {
                 const hit = hitTestResults[0];
                 reticle.visible = true;
                 reticle.matrix.fromArray(hit.getPose(referenceSpace).transform.matrix);
+                instructionText.innerText = "Yüzey bulundu. Yerleştirmek için ekrana dokunun.";
             } else {
                 reticle.visible = false;
+                instructionText.innerText = "Yüzey aranıyor... Lütfen telefonu hafifçe sağa sola hareket ettirin.";
             }
         }
     }
