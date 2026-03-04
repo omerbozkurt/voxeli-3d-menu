@@ -164,7 +164,7 @@ window.updateQty = function(itemId, delta) {
     
     if(navigator.vibrate) navigator.vibrate(50);
     updateCartUI();
-    renderProducts(); // Ürün listesindeki butonları güncelle
+    renderProducts(); 
 }
 
 function updateCartUI() {
@@ -225,7 +225,7 @@ cartOverlay.onclick = closeCartSheet;
 document.getElementById('confirm-order-btn').onclick = () => {
     activeOrder = true;
     showToast("Siparişiniz Mutfağa İletildi!");
-    cartState = {}; // Sepeti boşalt
+    cartState = {}; 
     updateCartUI();
     renderProducts();
     closeCartSheet();
@@ -284,7 +284,8 @@ function openModal(item) {
     const modelFileName = item.model.split('/').pop().replace('.glb', '');
 
     if (isIOS) {
-        arLink.href = `models/${modelFileName}.usdz#allowsContentScaling=0`;
+        // iOS İÇİN ÖLÇEKLEME İZNİ (allowsContentScaling=1 YAPILDI)
+        arLink.href = `models/${modelFileName}.usdz#allowsContentScaling=1`;
         arLink.setAttribute('rel', 'ar');
     } else {
         arLink.removeAttribute('rel');
@@ -305,8 +306,9 @@ function setupModal3D() {
     modalRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     viewerContainer.appendChild(modalRenderer.domElement);
 
+    // Kamerayı biraz daha geriye çektik ki modeller sığsın
     modalCamera = new THREE.PerspectiveCamera(40, viewerContainer.clientWidth / viewerContainer.clientHeight, 0.1, 1000);
-    modalCamera.position.set(0, 1.5, 8);
+    modalCamera.position.set(0, 1.5, 9); 
     
     modalScene.add(new THREE.AmbientLight(0xffffff, 1.2));
     const dirLight = new THREE.DirectionalLight(0xffffff, 1.5);
